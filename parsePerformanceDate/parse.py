@@ -11,7 +11,7 @@ import sys
 import cv2
 import os
 
-#有中文出现的情况，需要u'内容'
+#有中文出现的情况，需要u'内容'C:\Users\Administrator\Desktop\手游性能\2.4.5\录屏.csv
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -30,11 +30,14 @@ def go(newFile,oldFile):
                           header=8,
                           engine='python')
 
+    oldLable = oldFile.split('\\')[4]
+    newLable = newFile.split('\\')[4]
+
     #内存占用均值
     memMeanOld = pdOld[u'应用占用内存PSS(MB)'].mean()
     memMeanOld = ("%.2f" % memMeanOld)
 
-    memMeanNew = pdOld[u'应用占用内存PSS(MB)'].mean()
+    memMeanNew = pdNew[u'应用占用内存PSS(MB)'].mean()
     memMeanNew = ("%.2f" % memMeanNew)
 
     #cpu占用均值
@@ -57,28 +60,28 @@ def go(newFile,oldFile):
     plt.figure(num='astronaut',figsize=(10,8))
 
     plt.subplot(2,2,1) #左上展示mem对比图
-    plt.plot(pdOld[u'应用占用内存PSS(MB)'],color="blue", linewidth=2.5, linestyle="-", label=u"1.8.0")
-    plt.plot(pdNew[u'应用占用内存PSS(MB)'],color="red", linewidth=2.5, linestyle="-", label="1.8.5")
-    plt.axis([0,200,100,300])
+    plt.plot(pdOld[u'应用占用内存PSS(MB)'],color="blue", linewidth=2.5, linestyle="-", label='old')
+    plt.plot(pdNew[u'应用占用内存PSS(MB)'],color="red", linewidth=2.5, linestyle="-", label='new')
+    plt.axis([0,200,50,200])
     plt.title("Mem+ High-definition+30mins")
     plt.legend(loc='lower right')
 
     plt.subplot(2,2,2)#右上展示cpu对比图
-    plt.plot(pdOld[u'应用占用CPU率(%)'],color="blue", linewidth=2.5, linestyle="-", label=u"1.8.0")
-    plt.plot(pdNew[u'应用占用CPU率(%)'],color="red", linewidth=2.5, linestyle="-", label="1.8.5")
+    plt.plot(pdOld[u'应用占用CPU率(%)'],color="blue", linewidth=2.5, linestyle="-", label='old')
+    plt.plot(pdNew[u'应用占用CPU率(%)'],color="red", linewidth=2.5, linestyle="-", label='new')
     plt.title("Cpu+ High-definition+30mins")
     plt.legend(loc='lower right')
 
 
     plt.subplot(2,2,3)#左下展示电量消耗
-    plt.plot(pdOld[u'电量(%)'],color="blue", linewidth=2.5, linestyle="-", label=u"1.8.0")
-    plt.plot(pdNew[u'电量(%)'],color="red", linewidth=2.5, linestyle="-", label="1.8.5")
+    plt.plot(pdOld[u'电量(%)'],color="blue", linewidth=2.5, linestyle="-", label='old')
+    plt.plot(pdNew[u'电量(%)'],color="red", linewidth=2.5, linestyle="-", label='new')
     plt.title("battery+ HighDefinition+30mins")
     plt.legend(loc='lower right')
 
     plt.subplot(2,2,4)#左下展示电量消耗
-    plt.plot(pdOld[u'温度(C)'],color="blue", linewidth=2.5, linestyle="-", label=u"1.8.0")
-    plt.plot(pdNew[u'温度(C)'],color="red", linewidth=2.5, linestyle="-", label="1.8.5")
+    plt.plot(pdOld[u'温度(C)'],color="blue", linewidth=2.5, linestyle="-", label='old')
+    plt.plot(pdNew[u'温度(C)'],color="red", linewidth=2.5, linestyle="-", label='new')
     plt.title("temperature+ HighDefinition+30mins")
     plt.legend(loc='lower right')
 
@@ -88,6 +91,7 @@ def go(newFile,oldFile):
 if __name__ == '__main__':
     newFile = unicode(raw_input(u'输入新版本文件路径\n'))
     oldFile = unicode(raw_input(u'输入旧版本文件路径\n'))
+
     memMeanNew,memMeanOld,cpuMeanNew,cpuMeanOld,tempDiffNew,tempDiffOld,batteryDiffNew,batteryDiffOld = go(newFile,oldFile)
     print '新版本内存均值%s' % memMeanNew
     print '旧版本内存均值%s' % memMeanOld
